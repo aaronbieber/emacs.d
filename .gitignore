@@ -1,0 +1,8 @@
+*
+!.gitignore
+!eshell/alias
+!lisp/*.el
+!snippets
+!init.el
+!custom.el
+!themes
