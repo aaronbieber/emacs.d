@@ -119,20 +119,32 @@
 (require 'init-platform)
 (require 'init-global-functions)
 
+;; Utilities
+(use-package s
+  :ensure t
+  :defer t)
+
+(use-package dash
+  :ensure t
+  :defer t)
+
+(use-package magit
+  :ensure t
+  :defer t
+  :config
+  (setq magit-branch-arguments nil)
+  (setq magit-push-always-verify nil)
+  (setq magit-last-seen-setup-instructions "1.4.0")
+  (add-hook 'magit-mode-hook
+            (lambda ()
+              (define-key magit-mode-map (kbd ",o") 'delete-other-windows)))
+  (add-hook 'git-commit-mode-hook 'evil-insert-state))
+
 (use-package smart-mode-line
   :ensure t
   :config
   (setq sml/theme 'dark)
   (sml/setup))
-
-(use-package org-journal
-  :ensure t
-  :defer 2
-  :config
-  (setq org-journal-file-format "%Y%m%d.org")
-  (setq org-journal-date-format "%A, %x\n\n")
-  (setq org-journal-time-format "%R\n\n")
-  (setq org-journal-dir "~/syncthing/org/journal"))
 
 ;;; Required by init-maps, so it appears up here.
 (use-package tiny-menu
@@ -187,15 +199,6 @@
 (setq hugo-default-server-flags '(drafts future))
 (global-set-key (kbd "C-c h s") 'hugo-status)
 (require 'periodic-commit-minor-mode)
-
-;; Utilities
-(use-package s
-  :ensure t
-  :defer t)
-
-(use-package dash
-  :ensure t
-  :defer t)
 
 (use-package visual-fill-column
   :ensure t
@@ -549,10 +552,9 @@ goal is to have a blank line between list items."
 
 (use-package which-key
   :ensure t
-  :defer t
   :diminish ""
   :config
-  (which-key-mode t))
+  (which-key-mode))
 
 (use-package projectile
   :ensure t
@@ -572,18 +574,6 @@ goal is to have a blank line between list items."
   :diminish ""
   :config
   (setq-default highlight-symbol-idle-delay 1.5))
-
-(use-package magit
-  :ensure t
-  :defer t
-  :config
-  (setq magit-branch-arguments nil)
-  (setq magit-push-always-verify nil)
-  (setq magit-last-seen-setup-instructions "1.4.0")
-  (add-hook 'magit-mode-hook
-            (lambda ()
-              (define-key magit-mode-map (kbd ",o") 'delete-other-windows)))
-  (add-hook 'git-commit-mode-hook 'evil-insert-state))
 
 (use-package mmm-mode
   :ensure t
