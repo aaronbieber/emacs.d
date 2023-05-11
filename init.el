@@ -604,18 +604,8 @@ goal is to have a blank line between list items."
   (mmm-add-mode-ext-class 'markdown-mode nil 'markdown-cl)
   (mmm-add-mode-ext-class 'markdown-mode nil 'markdown-php))
 
-(use-package atomic-chrome
-  :ensure t
-  :defer t
-  :config
-  (setq atomic-chrome-default-major-mode 'markdown-mode)
-  (add-hook 'atomic-chrome-edit-mode-hook (lambda ()
-                                            (turn-off-auto-fill)
-                                            (visual-fill-column-mode t))))
-
 ;;; Helpers for GNUPG, which I use for encrypting/decrypting secrets.
 (require 'epa-file)
-(epa-file-enable)
 (setq-default epa-file-cache-passphrase-for-symmetric-encryption t)
 
 ;;; Flycheck mode:
@@ -779,9 +769,6 @@ The IGNORED argument is... Ignored."
 (use-package keychain-environment
   :ensure t
   :config (keychain-refresh-environment))
-
-(and (fboundp 'atomic-chrome-start-server)
-  (atomic-chrome-start-server))
 
 (provide 'init)
 ;;; init.el ends here
