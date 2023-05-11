@@ -1516,25 +1516,6 @@ appear out of order in the agenda."
   (evil-define-key 'visual org-mode-map (kbd "gy") 'ox-clip-formatted-copy))
 
 (use-package db :ensure t)
-(use-package gkroam
-  :hook (after-init . gkroam-mode)
-  :init
-  (setq gkroam-root-dir "~/syncthing/org/gkroam/"
-        gkroam-cache-dir "~/syncthing/org/gkroam/cache/"
-        gkroam-prettify-page-flag t
-        gkroam-window-margin nil
-        gkroam-title-height 200
-        gkroam-show-brackets-flag nil
-        gkroam-use-default-filename t)
-  :bind
-  (:map gkroam-mode-map
-        (("C-c r r" . gkroam-index)
-         ("C-c r d" . gkroam-daily)
-         ("C-c r f" . gkroam-find)
-         ("C-c r i" . gkroam-insert)
-         ("C-c r u" . gkroam-update)
-         ("C-c r U" . gkroam-update-all)
-         ("C-c r R" . gkroam-rebuild-caches))))
 
 (use-package org-recur
   :ensure t
