@@ -483,6 +483,9 @@ goal is to have a blank line between list items."
            (set-background-color "#222222"))
           ((eq mode :light)
            (message "Enabling light theme.")
+           (custom-theme-set-faces
+            'solarized-light-high-contrast
+            '(markdown-comment-face ((t (:foreground "#98a6a6" :strike-through nil)))))
            (load-theme 'solarized-light-high-contrast t)))
     (set-face-attribute 'default nil :height face-height)))
 
