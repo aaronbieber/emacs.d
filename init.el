@@ -477,7 +477,8 @@ goal is to have a blank line between list items."
            (custom-theme-set-faces
             'solarized-wombat-dark
             '(markdown-comment-face ((t (:foreground "#757575"))))
-            '(markdown-inline-code-face ((t (:foreground "#757575"))))
+            '(markdown-inline-code-face ((t (:foreground "#959595"))))
+            '(markdown-pre-face ((t (:foreground "#959595"))))
             '(markdown-metadata-key-face ((t (:foreground "#757575"))))
             '(org-agenda-structure ((t (:background "#353535")))))
            (set-background-color "#222222"))
