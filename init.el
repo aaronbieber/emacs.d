@@ -195,9 +195,12 @@
 
 ;; My packages (make sure they're cloned into "lisp")
 (require 'fence-edit)
+
 (require 'hugo)
 (setq hugo-default-server-flags '(drafts future))
+(setq hugo-create-post-bundles t)
 (global-set-key (kbd "C-c h s") 'hugo-status)
+
 (require 'periodic-commit-minor-mode)
 
 (use-package visual-fill-column
@@ -479,6 +482,8 @@ goal is to have a blank line between list items."
             '(markdown-comment-face ((t (:foreground "#757575"))))
             '(markdown-inline-code-face ((t (:foreground "#959595"))))
             '(markdown-pre-face ((t (:foreground "#959595"))))
+            '(markdown-url-face ((t (:foreground "#959595"))))
+            '(markdown-markup-face ((t (:foreground "#959595"))))
             '(markdown-metadata-key-face ((t (:foreground "#757575"))))
             '(org-agenda-structure ((t (:background "#353535")))))
            (set-background-color "#222222"))
