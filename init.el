@@ -438,11 +438,29 @@ COMMAND, ARG, IGNORED are the arguments required by the variable
   (define-key markdown-mode-map (kbd "C-c '")      'fence-edit-code-at-point)
 
   (defun air--in-markdown-link-p ()
-    (save-excursion
-      (and (eq major-mode 'markdown-mode)
-           (re-search-backward "\\[" (line-beginning-position) t)
-           (re-search-forward  "\\][[(]" (line-end-position) t))))
-  (add-to-list 'fill-nobreak-predicate 'air--in-markdown-link-p)
+    "Returns non-nil if point is within the text of a markdown link."
+    ;; This got way more complicated than I hoped.
+    (let ((pt (point))
+          (link-start-behind
+           (save-excursion
+             (re-search-backward "^\\|[^]]\\[" (line-beginning-position) t)))
+          (link-start-ahead
+           (save-excursion
+             (re-search-forward "[^]]\\[" (line-end-position) t)))
+          (link-end-behind
+           (save-excursion
+             (re-search-backward  "\\][[(]" (line-beginning-position) t)))
+          (link-end-ahead
+           (save-excursion
+             (re-search-forward  "\\][[(]" (line-end-position) t))))
+      (and
+       (eq major-mode 'markdown-mode)
+       link-start-behind
+       link-end-ahead
+       (or (not link-end-behind)
+           (< link-end-behind link-start-behind))
+       (or (not link-start-ahead)
+           (> link-start-ahead link-end-ahead)))))
 
   (defun air--before-markdown-insert-list-item (&optional arg)
     "Insert a newline before a markdown list item
@@ -465,6 +483,7 @@ goal is to have a blank line between list items."
                                   (turn-on-auto-fill)
                                   ;; Don't wrap Liquid tags
                                   (setq auto-fill-inhibit-regexp (rx "{" (? "{") (1+ (or "%" "<" " ")) (1+ letter)))
+                                  (add-to-list 'fill-nobreak-predicate 'air--in-markdown-link-p)
                                   (flyspell-mode))))
 
 (defun air-set-theme (mode)
