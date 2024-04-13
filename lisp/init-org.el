@@ -668,9 +668,8 @@ TAG is chosen interactively from the global tags completion table."
          ("C-c f i" . air-org-goto-custom-id))
   :config
   (require 'org-protocol)
+  (add-to-list 'org-modules 'org-habit)
   (setq org-hide-emphasis-markers t)
-  (setq org-modules
-        '(org-bbdb org-bibtex org-docview org-habit org-info org-w3m))
   (setq org-todo-keywords
         '((sequence "TODO(t)" "DOING(o)" "LATER(l)" "WAITING(w!)" "|" "DONE(d!)" "CANCELED(c!)")))
   (setq org-blank-before-new-entry '((heading . t)
