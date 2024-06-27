@@ -17,6 +17,7 @@
               (sanityinc/set-frame-font-size 14)
               (define-key global-map (kbd "<s-return>") 'toggle-frame-fullscreen))
 
+            ;; I don't think I do this anymore (windows native?)
             (when (memq window-system '(w32))
               (set-face-attribute 'default nil :font "Hack")
               (setq epg-gpg-home-directory "c:/Users/Aaron/AppData/Roaming/GnuPG")
