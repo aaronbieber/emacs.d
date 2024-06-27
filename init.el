@@ -476,15 +476,18 @@ goal is to have a blank line between list items."
               'air--before-markdown-insert-list-item)
 
   (add-hook 'markdown-mode-hook (lambda ()
+                                  (evil-define-key 'normal markdown-mode-map (kbd "C-c W") 'air-browse-current-file-location)
                                   (visual-line-mode t)
                                   (set-fill-column 80)
                                   (yas-minor-mode-on)
                                   (hugo-minor-mode t)
                                   (turn-on-auto-fill)
+                                  (flyspell-mode)
                                   ;; Don't wrap Liquid tags
                                   (setq auto-fill-inhibit-regexp (rx "{" (? "{") (1+ (or "%" "<" " ")) (1+ letter)))
+                                  ;; Don't break inside links
                                   (add-to-list 'fill-nobreak-predicate 'air--in-markdown-link-p)
-                                  (flyspell-mode))))
+                                  )))
 
 (defun air-set-theme (mode)
   "Set a theme for MODE `:dark' or `:light'."

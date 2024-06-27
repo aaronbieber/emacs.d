@@ -6,6 +6,16 @@
   (interactive)
   (transpose-words 1))
 
+(defun air-transpose-word-backward ()
+  "Transpose word at point one word backward."
+  (interactive)
+  (transpose-words -1))
+
+(defun air-browse-current-file-location ()
+  "Open the current buffer's directory in the OS browser."
+  (interactive)
+  (start-process "Explorer" nil "explorer.exe" "."))
+
 (defun air-insert-week-number-heading (&optional bare)
   "Insert current week number/percent heading, unless BARE.
 
@@ -20,11 +30,6 @@ with percentage."
              (or bare "Week ")
              (number-to-string (string-to-int (format-time-string "%U")))
              (or bare (concat " (" (number-to-string percent) "%)"))))))
-
-(defun air-transpose-word-backward ()
-  "Transpose word at point one word backward."
-  (interactive)
-  (transpose-words -1))
 
 (defun air--pop-to-file (file &optional split)
   "Visit a FILE, either in the current window or a SPLIT."
