@@ -450,6 +450,7 @@ COMMAND, ARG, IGNORED are the arguments required by the variable
   :mode "\\.md\\'"
   :config
   (setq markdown-command "pandoc --from markdown_github-hard_line_breaks --to html")
+  (setq markdown-asymmetric-header t)
   (define-key markdown-mode-map (kbd "<C-return>") 'markdown-insert-list-item)
   (define-key markdown-mode-map (kbd "C-c '")      'fence-edit-code-at-point)
 
