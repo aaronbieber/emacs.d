@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Header 3
+# contributor: Aaron Bieber <aaron@aaronbieber.com>
+# key: h3
+# --
+### ${1:Header 3}
+
+$0
