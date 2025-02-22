@@ -28,8 +28,6 @@
     "r"  'chrome-reload
     "R"  (lambda () (interactive) (font-lock-fontify-buffer) (redraw-display))
     "S"  'delete-trailing-whitespace
-    "t"  'gtags-reindex
-    "T"  'gtags-find-tag
     "w"  'save-buffer
     "x"  'helm-M-x
     "y"  'yank-to-x-clipboard)
@@ -91,7 +89,6 @@
   (evil-define-key 'normal global-map (kbd "C-`")     (lambda ()
                                                         (interactive)
                                                         (dired (expand-file-name "~"))))
-  (evil-define-key 'normal global-map (kbd "C-]")     'gtags-find-tag-from-here)
   (evil-define-key 'normal global-map (kbd "g/")      'occur-last-search)
   (evil-define-key 'normal global-map (kbd "[i")      'show-first-occurrence)
   (evil-define-key 'normal global-map (kbd "S-SPC")   'air-pop-to-org-agenda-default)
