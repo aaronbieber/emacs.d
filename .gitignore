@@ -3,6 +3,7 @@
 !eshell/alias
 !lisp/*.el
 !snippets
+!snippets/**
 !init.el
 !custom.el
 !themes
