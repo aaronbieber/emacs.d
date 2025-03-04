@@ -5,8 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
- '(ansi-color-names-vector
-   ["#4F4F4F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#6F6F6F"])
+ '(company-gtags-modes '(jde-mode))
  '(css-indent-offset 2)
  '(custom-safe-themes
    '("91ce1e1533921a31778b95d1626371499e42d46833d703e25a07dcb8c283f4af" . t))
@@ -18,7 +17,7 @@
  '(markdown-preview-custom-template "/Users/abieber/.emacs.d/markdown-preview-template.html")
  '(org-hide-emphasis-markers t)
  '(package-selected-packages
-   '(csv-mode evil-terminal-cursor-changer org-journal xclip undo-fu evil-org csv keychain-environment db ripgrep ahk-mode simple-httpd atomic-chrome ox-hugo ssh-agency dired gnu-elpa-keyring-update orgalist htmlize olivetti apples-mode applescript-mode magithub jade-mode yasnippet-snippets esh-autosuggest gruvbox-theme php-extras wgrep s tiny-menu writeroom-mode feature-mode buttercup mustache-mode challenger-deep-theme helm-make all-the-icons-dired all-the-icons rjsx-mode json-mode lua-mode helm-spotify-plus go-projectile jinja2-mode cyberpunk-theme go-mode jujube-theme smart-mode-line-powerline-theme smart-mode-line visual-fill-column websocket flycheck powerline evil key-chord color-theme-modern esup counsel-projectile restclient ox-reveal org-tree-slide epresent color-moccur xterm-color nlinum-relative company-shell pandoc-mode virtualenvwrapper counsel helm-swoop groovy-mode octopress zenburn-theme yaml-mode which-key wgrep-ag web-mode w3m use-package twittering-mode sunshine sublime-themes rainbow-mode powerline-evil mmm-mode markdown-mode magit highlight-symbol helm-projectile gtags fullframe flycheck-package exec-path-from-shell evil-surround evil-leader evil-jumper evil-indent-textobject emmet-mode elpy dictionary color-theme-sanityinc-tomorrow bpr auto-complete ag))
+   '(just-mode csv-mode evil-terminal-cursor-changer org-journal xclip undo-fu evil-org csv keychain-environment db ripgrep ahk-mode simple-httpd atomic-chrome ox-hugo ssh-agency dired gnu-elpa-keyring-update orgalist htmlize olivetti apples-mode applescript-mode magithub jade-mode yasnippet-snippets esh-autosuggest gruvbox-theme php-extras wgrep s tiny-menu writeroom-mode feature-mode buttercup mustache-mode challenger-deep-theme helm-make all-the-icons-dired all-the-icons rjsx-mode json-mode lua-mode helm-spotify-plus go-projectile jinja2-mode cyberpunk-theme go-mode jujube-theme smart-mode-line-powerline-theme smart-mode-line visual-fill-column websocket flycheck powerline evil key-chord color-theme-modern esup counsel-projectile restclient ox-reveal org-tree-slide epresent color-moccur xterm-color nlinum-relative company-shell pandoc-mode virtualenvwrapper counsel helm-swoop groovy-mode octopress zenburn-theme yaml-mode which-key wgrep-ag web-mode w3m use-package twittering-mode sunshine sublime-themes rainbow-mode powerline-evil mmm-mode markdown-mode magit highlight-symbol helm-projectile fullframe flycheck-package exec-path-from-shell evil-surround evil-leader evil-jumper evil-indent-textobject emmet-mode elpy dictionary color-theme-sanityinc-tomorrow bpr auto-complete ag))
  '(safe-local-variable-values '((css-indent-offset . 2) (no-byte-compile t)))
  '(writeroom-global-effects
    '(writeroom-set-alpha writeroom-set-menu-bar-lines writeroom-set-tool-bar-lines writeroom-set-vertical-scroll-bars writeroom-set-bottom-divider-width)))
@@ -28,7 +27,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "JetBrainsMono Nerd Font Mono" :foundry "JB  " :slant normal :weight normal :height 128 :width normal))))
+ '(default ((((class color) (min-colors 89)) (:foreground "#d4d4d4" :background "#000000"))))
  '(deadgrep-filename-face ((t (:foreground "gold" :underline t))))
  '(deadgrep-match-face ((t (:background "#2f2f2d" :foreground "lime green"))))
  '(italic ((t (:slant italic))))
@@ -42,4 +41,6 @@
  '(org-habit-ready-face ((((class color) (min-colors 89)) (:background "#3d454c" :foreground "#8ac6f2"))))
  '(org-habit-ready-future-face ((t (:background "SeaGreen4"))))
  '(org-meta-line ((((class color) (min-colors 89)) (:foreground "#878777" :slant italic))))
- '(org-priority ((t (:inherit font-lock-warning-face)))))
+ '(org-priority ((t (:inherit font-lock-warning-face))))
+ '(org-scheduled-previously ((((class color) (min-colors 89)) (:foreground "#7ec98f"))))
+ '(org-scheduled-today ((((class color) (min-colors 89)) (:foreground "#a4b5e6" :weight normal)))))
