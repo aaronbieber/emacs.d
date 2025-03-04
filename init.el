@@ -200,6 +200,17 @@
 (setq hugo-default-server-flags '(drafts future))
 (setq hugo-create-post-bundles t)
 (global-set-key (kbd "C-c h s") 'hugo-status)
+(define-key hugo-mode-map (kbd "C") 'air-hugo-maybe-create-status-post)
+(defun air-hugo-maybe-create-status-post ()
+  "If we're in the \=status\= blog, create a new status post."
+  (interactive)
+  (let* ((project (car (last
+                        (cl-remove-if
+                         (lambda (i) (string= i ""))
+                         (file-name-split (hugo--get-root)))))))
+    (if (string= project "status")
+        (hugo--create-content "posts" (format-time-string "%Y-%m-%d %H:%M"))
+      (error "Status posts must be created in the status blog"))))
 
 (require 'periodic-commit-minor-mode)
 
