@@ -146,6 +146,11 @@
   (setq sml/theme 'dark)
   (sml/setup))
 
+(use-package wc-mode
+  :ensure t
+  :config
+  (setq wc-modeline-format "WC[%tc/%tw]"))
+
 ;;; Required by init-maps, so it appears up here.
 (use-package tiny-menu
   :ensure t
@@ -494,6 +499,7 @@ goal is to have a blank line between list items."
                                   (hugo-minor-mode t)
                                   (turn-on-auto-fill)
                                   (flyspell-mode)
+                                  (wc-mode t)
                                   ;; Don't wrap Liquid tags
                                   (setq auto-fill-inhibit-regexp (rx "{" (? "{") (1+ (or "%" "<" " ")) (1+ letter)))
                                   ;; Don't break inside links
