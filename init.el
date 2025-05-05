@@ -214,7 +214,7 @@
                          (lambda (i) (string= i ""))
                          (file-name-split (hugo--get-root)))))))
     (if (string= project "status")
-        (hugo--create-content "posts" (format-time-string "%Y-%m-%d %H:%M"))
+        (hugo--create-content "posts" (format-time-string "%Y-%m-%d %H:%M %A"))
       (error "Status posts must be created in the status blog"))))
 
 (require 'periodic-commit-minor-mode)
