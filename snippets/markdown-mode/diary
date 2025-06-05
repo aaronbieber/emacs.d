@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: Diary tag
+# contributor: Aaron Bieber <aaron@aaronbieber.com>
+# key: diary
+# --
+{{< diary >}}
+$0
+{{< /diary >}}
