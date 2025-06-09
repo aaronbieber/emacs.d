@@ -205,6 +205,7 @@
 (setq hugo-default-server-flags '(drafts future))
 (setq hugo-create-post-bundles t)
 (global-set-key (kbd "C-c h s") 'hugo-status)
+
 (define-key hugo-mode-map (kbd "C") 'air-hugo-maybe-create-status-post)
 (defun air-hugo-maybe-create-status-post ()
   "If we're in the \=status\= blog, create a new status post."
@@ -216,6 +217,17 @@
     (if (string= project "status")
         (hugo--create-content "posts" (format-time-string "%Y-%m-%d %H:%M %A"))
       (error "Status posts must be created in the status blog"))))
+
+(define-key hugo-mode-map (kbd "T") 'air-hugo-open-shell)
+(defun air-hugo-open-shell ()
+  "Open a shell in another window at the root of the Hugo project."
+  (interactive)
+  (let ((pwd (hugo--get-root)))
+    (with-temp-buffer
+      (cd pwd)
+      (let ((buf (eshell)))
+        (switch-to-buffer (other-buffer buf))
+        (switch-to-buffer-other-window buf)))))
 
 (require 'periodic-commit-minor-mode)
 
