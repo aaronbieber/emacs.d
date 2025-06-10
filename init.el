@@ -229,6 +229,31 @@
         (switch-to-buffer (other-buffer buf))
         (switch-to-buffer-other-window buf)))))
 
+(define-key hugo-mode-map (kbd "D") 'air-hugo-just-deploy)
+(defun air-hugo-just-deploy ()
+  "Deploy the current Hugo site by running a Just recipe."
+  (interactive)
+  (let* ((buf (get-buffer-create  "*just-deploy*"))
+         (pwd (hugo--get-root))
+         (map (make-sparse-keymap)))
+    (define-key map (kbd "q") (lambda ()
+                                (interactive)
+                                (quit-window)
+                                (kill-buffer "*just-deploy*")))
+    (with-current-buffer buf
+      (setq buffer-read-only t)
+      (kill-all-local-variables)
+      ;; This is the magic that makes my key binding override evil
+      (setq-local overriding-local-map map)
+      (cd pwd)
+      (pop-to-buffer buf)
+      (let ((inhibit-read-only t))
+        (eshell-command "just deploy" t)
+        (require 'ansi-color)
+        (ansi-color-apply-on-region (point-min) (point-max)))
+      (goto-char (point-max))
+      (recenter -1))))
+
 (require 'periodic-commit-minor-mode)
 
 (use-package visual-fill-column
