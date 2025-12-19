@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Codename
+# key: $$
+# --
+
+\$\$$1\$\$ $0

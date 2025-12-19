@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: belay_buddy
+# key: ,belay
+# --
+
+\`$BELAY_BUDDY\`
