@@ -27,7 +27,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 89)) (:foreground "#d4d4d4" :background "#000000"))))
+ ;;'(default ((((class color) (min-colors 89)) (:foreground "#d4d4d4" :background "#000000"))))
  '(deadgrep-filename-face ((t (:foreground "gold" :underline t))))
  '(deadgrep-match-face ((t (:background "#2f2f2d" :foreground "lime green"))))
  '(italic ((t (:slant italic))))
