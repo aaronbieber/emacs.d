@@ -30,7 +30,12 @@
     "S"  'delete-trailing-whitespace
     "w"  'save-buffer
     "x"  'helm-M-x
-    "y"  'yank-to-x-clipboard)
+    "y"  'yank-to-x-clipboard
+    "SPC" (lambda ()
+            (interactive)
+            (evil-fill-and-move
+             (save-excursion (evil-backward-paragraph) (point))
+             (save-excursion (evil-forward-paragraph) (point)))))
 
   (defun magit-blame-toggle ()
     "Toggle magit-blame-mode on and off interactively."
