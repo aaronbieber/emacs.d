@@ -254,6 +254,65 @@
       (goto-char (point-max))
       (recenter -1))))
 
+(define-key hugo-minor-mode-map (kbd "C-c h h") 'air-hugo-summarize-content)
+(defun air-hugo-summarize-content (&optional include-diary)
+  "Summarize Hugo blog post content using Claude.
+With a prefix argument INCLUDE-DIARY, include diary shortcode content in the summary."
+  (interactive "P")
+  (let* ((content (air-hugo--extract-content-after-frontmatter include-diary))
+         (prompt "Summarize this content into a single, short, concise sentence suitable for a social post headline:")
+         (full-prompt (concat prompt "\n\n" content)))
+    (if (string-empty-p content)
+        (message "No content found after YAML front matter")
+      (let ((output-buffer (get-buffer-create "*Claude Summary*")))
+        (with-current-buffer output-buffer
+          (erase-buffer)
+          (insert "Generating summary...\n"))
+        (display-buffer output-buffer)
+        (let ((process (start-process "claude" output-buffer "claude" "-p" "--output-format" "text" full-prompt)))
+          (set-process-sentinel process
+                                (lambda (proc event)
+                                  (when (string-match-p "finished" event)
+                                    (with-current-buffer (process-buffer proc)
+                                      (goto-char (point-min))
+                                      (when (search-forward "Generating summary...\n" nil t)
+                                        (delete-region (point-min) (point)))
+                                      ;; Clean up ANSI codes and terminal control sequences
+                                      (require 'ansi-color)
+                                      (ansi-color-apply-on-region (point-min) (point-max))
+                                      ;; Remove remaining escape sequences like ESC]9;4;0;^G
+                                      (goto-char (point-min))
+                                      (while (re-search-forward "\033\\].*?\007" nil t)
+                                        (replace-match ""))
+                                      (goto-char (point-min))
+                                      (while (re-search-forward "\033\\[[0-9;]*[A-Za-z]" nil t)
+                                        (replace-match ""))
+                                      (goto-char (point-min)))))))))))
+
+(defun air-hugo--remove-diary-shortcodes (content)
+  "Remove diary shortcodes from CONTENT string.
+Removes all instances of {{< diary >}}...{{< /diary >}} blocks."
+  (let ((result content))
+    (while (string-match "{{<[[:space:]]*diary[[:space:]]*>}}\\(\\(?:.\\|\n\\)*?\\){{<[[:space:]]*/diary[[:space:]]*>}}" result)
+      (setq result (replace-match "" t t result)))
+    result))
+
+(defun air-hugo--extract-content-after-frontmatter (&optional include-diary)
+  "Extract content from current buffer after YAML front matter.
+If INCLUDE-DIARY is nil, filter out diary shortcode blocks."
+  (save-excursion
+    (goto-char (point-min))
+    (let ((content (if (looking-at "^---$")
+                       (progn
+                         (forward-line 1)
+                         (if (search-forward "\n---\n" nil t)
+                             (buffer-substring-no-properties (point) (point-max))
+                           ""))
+                     (buffer-substring-no-properties (point-min) (point-max)))))
+      (if include-diary
+          content
+        (air-hugo--remove-diary-shortcodes content)))))
+
 (require 'periodic-commit-minor-mode)
 
 (use-package visual-fill-column
