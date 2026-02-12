@@ -233,7 +233,8 @@
 (defun air-hugo-just-deploy ()
   "Deploy the current Hugo site by running a Just recipe."
   (interactive)
-  (let* ((buf (get-buffer-create  "*just-deploy*"))
+  (require 'ansi-color)
+  (let* ((buf (get-buffer-create "*just-deploy*"))
          (pwd (hugo--get-root))
          (map (make-sparse-keymap)))
     (define-key map (kbd "q") (lambda ()
@@ -241,18 +242,36 @@
                                 (quit-window)
                                 (kill-buffer "*just-deploy*")))
     (with-current-buffer buf
+      (let ((inhibit-read-only t))
+        (erase-buffer))
       (setq buffer-read-only t)
       (kill-all-local-variables)
       ;; This is the magic that makes my key binding override evil
       (setq-local overriding-local-map map)
-      (cd pwd)
+      (setq default-directory pwd)
       (pop-to-buffer buf)
-      (let ((inhibit-read-only t))
-        (eshell-command "just deploy" t)
-        (require 'ansi-color)
-        (ansi-color-apply-on-region (point-min) (point-max)))
-      (goto-char (point-max))
-      (recenter -1))))
+      (let ((proc (start-process "just-deploy" buf "just" "deploy")))
+        (set-process-filter proc
+                            (lambda (process output)
+                              (when (buffer-live-p (process-buffer process))
+                                (with-current-buffer (process-buffer process)
+                                  (let ((inhibit-read-only t))
+                                    (goto-char (point-max))
+                                    (let ((start (point)))
+                                      (insert output)
+                                      (ansi-color-apply-on-region start (point))))
+                                  (let ((win (get-buffer-window (current-buffer))))
+                                    (when win
+                                      (with-selected-window win
+                                        (goto-char (point-max))
+                                        (recenter -1))))))))
+        (set-process-sentinel proc
+                              (lambda (process event)
+                                (when (buffer-live-p (process-buffer process))
+                                  (with-current-buffer (process-buffer process)
+                                    (let ((inhibit-read-only t))
+                                      (goto-char (point-max))
+                                      (insert (format "\n%s" event)))))))))))
 
 (define-key hugo-minor-mode-map (kbd "C-c h h") 'air-hugo-summarize-content)
 (defun air-hugo-summarize-content (&optional include-diary)
