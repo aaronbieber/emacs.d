@@ -276,7 +276,9 @@
 (define-key hugo-minor-mode-map (kbd "C-c h h") 'air-hugo-summarize-content)
 (defun air-hugo-summarize-content (&optional include-diary)
   "Summarize Hugo blog post content using Claude.
-With a prefix argument INCLUDE-DIARY, include diary shortcode content in the summary."
+
+With a prefix argument INCLUDE-DIARY, include diary shortcode content in the
+summary."
   (interactive "P")
   (let* ((content (air-hugo--extract-content-after-frontmatter include-diary))
          (prompt "Summarize this content into a single, short, concise sentence suitable for a social post headline:")
@@ -310,6 +312,7 @@ With a prefix argument INCLUDE-DIARY, include diary shortcode content in the sum
 
 (defun air-hugo--remove-diary-shortcodes (content)
   "Remove diary shortcodes from CONTENT string.
+
 Removes all instances of {{< diary >}}...{{< /diary >}} blocks."
   (let ((result content))
     (while (string-match "{{<[[:space:]]*diary[[:space:]]*>}}\\(\\(?:.\\|\n\\)*?\\){{<[[:space:]]*/diary[[:space:]]*>}}" result)
@@ -318,6 +321,7 @@ Removes all instances of {{< diary >}}...{{< /diary >}} blocks."
 
 (defun air-hugo--extract-content-after-frontmatter (&optional include-diary)
   "Extract content from current buffer after YAML front matter.
+
 If INCLUDE-DIARY is nil, filter out diary shortcode blocks."
   (save-excursion
     (goto-char (point-min))
