@@ -1,5 +1,4 @@
-;;; init.el -- My Emacs configuration
-;-*-Emacs-Lisp-*-
+;;; init.el -- My Emacs configuration  -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 ;;
@@ -273,6 +272,30 @@
                                       (goto-char (point-max))
                                       (insert (format "\n%s" event)))))))))))
 
+(defun air-hugo--run-summary (include-diary callback)
+  "Run Claude to summarize Hugo content, then call CALLBACK with the result.
+
+INCLUDE-DIARY controls whether diary shortcode content is included.
+CALLBACK is a function that receives the cleaned summary string."
+  (let* ((content (air-hugo--extract-content-after-frontmatter include-diary))
+         (prompt "Summarize this content into a single, short, concise sentence suitable for a social post headline:")
+         (full-prompt (concat prompt "\n\n" content)))
+    (if (string-empty-p content)
+        (message "No content found after YAML front matter")
+      (let* ((temp-buffer (generate-new-buffer " *claude-summary-temp*"))
+             (process (start-process "claude" temp-buffer "claude" "-p" "--output-format" "text" full-prompt)))
+        (set-process-sentinel process
+                              (lambda (proc event)
+                                (when (string-match-p "finished" event)
+                                  (let ((cleaned-text
+                                         (with-current-buffer (process-buffer proc)
+                                           (goto-char (point-min))
+                                           (while (re-search-forward "\033\\[[^a-zA-Z]*[a-zA-Z]\\|\033\\][^\007]*\007\\|\r" nil t)
+                                             (replace-match ""))
+                                           (string-trim (buffer-string)))))
+                                    (kill-buffer (process-buffer proc))
+                                    (funcall callback cleaned-text)))))))))
+
 (define-key hugo-minor-mode-map (kbd "C-c h h") 'air-hugo-summarize-content)
 (defun air-hugo-summarize-content (&optional include-diary)
   "Summarize Hugo blog post content using Claude.
@@ -280,29 +303,32 @@
 With a prefix argument INCLUDE-DIARY, include diary shortcode content in the
 summary."
   (interactive "P")
-  (let* ((content (air-hugo--extract-content-after-frontmatter include-diary))
-         (prompt "Summarize this content into a single, short, concise sentence suitable for a social post headline:")
-         (full-prompt (concat prompt "\n\n" content)))
-    (if (string-empty-p content)
-        (message "No content found after YAML front matter")
-      (let ((output-buffer (get-buffer-create "*Claude Summary*")))
-        (with-current-buffer output-buffer
-          (erase-buffer)
-          (insert "Generating summary...\n"))
-        (display-buffer output-buffer)
-        (let ((process (start-process "claude" output-buffer "claude" "-p" "--output-format" "text" full-prompt)))
-          (set-process-sentinel process
-                                (lambda (proc event)
-                                  (when (string-match-p "finished" event)
-                                    (with-current-buffer (process-buffer proc)
-                                      (goto-char (point-min))
-                                      (when (search-forward "Generating summary...\n" nil t)
-                                        (delete-region (point-min) (point)))
-                                      ;; Remove terminal control sequences and carriage returns
-                                      (goto-char (point-min))
-                                      (while (re-search-forward "\033\\[[^a-zA-Z]*[a-zA-Z]\\|\033\\][^\007]*\007\\|\r" nil t)
-                                        (replace-match ""))
-                                      (goto-char (point-min)))))))))))
+  (air-hugo--run-summary include-diary
+                         (lambda (summary)
+                           (let ((output-buffer (get-buffer-create "*Claude Summary*")))
+                             (with-current-buffer output-buffer
+                               (erase-buffer)
+                               (insert summary)
+                               (goto-char (point-min)))
+                             (display-buffer output-buffer)))))
+
+(define-key hugo-minor-mode-map (kbd "C-c h i h") 'air-hugo-insert-summary)
+(defun air-hugo-insert-summary (&optional include-diary)
+  "Summarize Hugo blog post content and insert at point.
+
+With a prefix argument INCLUDE-DIARY, include diary shortcode content in the
+summary."
+  (interactive "P")
+  (let ((marker (point-marker)))
+    (message "Generating summary...")
+    (air-hugo--run-summary include-diary
+                           (lambda (summary)
+                             (with-current-buffer (marker-buffer marker)
+                               (save-excursion
+                                 (goto-char marker)
+                                 (insert summary)))
+                             (set-marker marker nil)
+                             (message "Summary inserted.")))))
 
 (defun air-hugo--remove-diary-shortcodes (content)
   "Remove diary shortcodes from CONTENT string.
