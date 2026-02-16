@@ -298,15 +298,9 @@ summary."
                                       (goto-char (point-min))
                                       (when (search-forward "Generating summary...\n" nil t)
                                         (delete-region (point-min) (point)))
-                                      ;; Clean up ANSI codes and terminal control sequences
-                                      (require 'ansi-color)
-                                      (ansi-color-apply-on-region (point-min) (point-max))
-                                      ;; Remove remaining escape sequences like ESC]9;4;0;^G
+                                      ;; Remove terminal control sequences and carriage returns
                                       (goto-char (point-min))
-                                      (while (re-search-forward "\033\\].*?\007" nil t)
-                                        (replace-match ""))
-                                      (goto-char (point-min))
-                                      (while (re-search-forward "\033\\[[0-9;]*[A-Za-z]" nil t)
+                                      (while (re-search-forward "\033\\[[^a-zA-Z]*[a-zA-Z]\\|\033\\][^\007]*\007\\|\r" nil t)
                                         (replace-match ""))
                                       (goto-char (point-min)))))))))))
 
