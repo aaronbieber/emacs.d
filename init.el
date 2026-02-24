@@ -362,6 +362,20 @@ If INCLUDE-DIARY is nil, filter out diary shortcode blocks."
   :ensure t
   :defer t)
 
+(use-package writeroom-mode
+  :ensure t
+  :defer t
+  :config
+  (setq writeroom-bottom-divider-width 0)
+  (setq writeroom-mode-line
+        '((:eval
+           (let* ((left-margin (or (car (window-margins)) 0))
+                  (content (format-mode-line
+                            '(" %* "
+                             (:eval (when (bound-and-true-p wc-mode)
+                                       (format-mode-line wc-buffer-stats)))))))
+             (concat (make-string left-margin ?\s) content))))))
+
 ;; Org Mode
 (require 'init-org)
 
