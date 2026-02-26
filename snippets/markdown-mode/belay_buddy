@@ -2,5 +2,4 @@
 # name: belay_buddy
 # key: ,belay
 # --
-
-\`$BELAY_BUDDY\`
+\`$BELAY_BUDDY\` $0

@@ -2,4 +2,4 @@
 # name: Three dots
 # key: dots
 # --
-{{< dots >}}
+{{< dots >}}$0

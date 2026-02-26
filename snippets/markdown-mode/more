@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: More marker
-# key: more
+# key: ,more
 # --
-<!--more-->
+<!--more-->$0

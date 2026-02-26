@@ -2,4 +2,4 @@
 # name: Hugo shortcode
 # key: {{
 # --
-{{< $0 >}}
+{{< $1 >}}$0
