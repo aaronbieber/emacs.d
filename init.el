@@ -518,7 +518,6 @@ If INCLUDE-DIARY is nil, filter out diary shortcode blocks."
 (use-package helm
   :ensure t
   :diminish helm-mode
-  :commands helm-mode
   :config
   (helm-mode 1)
   (setq helm-buffers-fuzzy-matching t)
