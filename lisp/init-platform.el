@@ -4,9 +4,10 @@
 ;;; Code:
 (require 'init-fonts)
 
-;; This must run after window setup or it seems to have no effect.
-(add-hook 'window-setup-hook
-          (lambda ()
+(defun air--apply-platform-config (&optional frame)
+  "Apply platform-specific configuration for FRAME."
+  (with-selected-frame (or frame (selected-frame))
+    (when (display-graphic-p)
             (when (eq system-type 'darwin)
               (use-package exec-path-from-shell
                 :ensure t
@@ -24,6 +25,15 @@
               (setq epg-gpg-program "c:/Users/Aaron/Programs/GnuPG/bin/gpg.exe")
               (setq epg-gpgconf-program "c:/Users/Aaron/Programs/GnuPG/bin/gpgconf.exe")
               (sanityinc/set-frame-font-size 20))
+
+            ;; Native Linux
+            (when (and (eq system-type 'gnu/linux)
+                       (not (string-match
+                             "microsoft"
+                             (shell-command-to-string "uname -r"))))
+              (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font")
+              (sanityinc/set-frame-font-size 14)
+              (set-frame-size (selected-frame) 100 40))
 
             ;; WSL/WSL2
             (when (and (eq system-type 'gnu/linux)
@@ -48,7 +58,10 @@
             (global-set-key (kbd "<XF86AudioPlay>") (lambda () (interactive)))
 
             (when (fboundp 'powerline-reset)
-              (powerline-reset))))
+              (powerline-reset)))))
+
+(add-hook 'after-make-frame-functions #'air--apply-platform-config)
+(add-hook 'window-setup-hook #'air--apply-platform-config)
 
 (if (eq window-system 'w32)
     (setq ispell-program-name "~/hunspell/bin/hunspell.exe"))
