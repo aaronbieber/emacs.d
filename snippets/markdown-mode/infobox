@@ -1,7 +1,7 @@
 # -*- mode: snippet; require-final-newline: nil -*-
-# name: The Octopress Infobox
+# name: The Hugo Infobox
 # key: infobox
 # --
-{% infobox %}
+{{< infobox >}}
 $0
-{% endinfobox %}
+{{< /infobox >}}
