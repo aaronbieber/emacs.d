@@ -283,6 +283,7 @@ CALLBACK is a function that receives the cleaned summary string."
     (if (string-empty-p content)
         (message "No content found after YAML front matter")
       (let* ((temp-buffer (generate-new-buffer " *claude-summary-temp*"))
+             (process-environment (append '("NO_COLOR=1" "TERM=dumb") process-environment))
              (process (start-process "claude" temp-buffer "claude" "-p" "--output-format" "text" full-prompt)))
         (set-process-sentinel process
                               (lambda (proc event)
@@ -290,7 +291,7 @@ CALLBACK is a function that receives the cleaned summary string."
                                   (let ((cleaned-text
                                          (with-current-buffer (process-buffer proc)
                                            (goto-char (point-min))
-                                           (while (re-search-forward "\033\\[[^a-zA-Z]*[a-zA-Z]\\|\033\\][^\007]*\007\\|\r" nil t)
+                                           (while (re-search-forward "\033\\[[^a-zA-Z]*[a-zA-Z]\\|\033\\][^\007]*\007\\|\033[()][0-9A-Za-z]\\|\033[0-9]\\|[\016\017]\\|\r" nil t)
                                              (replace-match ""))
                                            (string-trim (buffer-string)))))
                                     (kill-buffer (process-buffer proc))
